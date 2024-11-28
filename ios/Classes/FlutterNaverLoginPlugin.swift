@@ -311,10 +311,8 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin,
         let authValue = "Bearer \(accessToken)"
         urlRequest.setValue(authValue, forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: urlRequest) {
-            [weak self] data, response, error in
-            guard self != nil else { return }
-
+        // URLSession을 사용해 비동기 네트워크 요청 수행
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             if let error = error {
                 print("Error occurred: \(error.localizedDescription)")
                 completion(.failure(error))
@@ -334,7 +332,6 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin,
                     with: data, options: []) as? [String: Any],
                     let res = dict["response"] as? [String: Any]
                 {
-
                     var info: [String: String] = ["status": "loggedIn"]
 
                     let userFields = [
@@ -364,6 +361,7 @@ public class FlutterNaverLoginPlugin: NSObject, FlutterPlugin,
             }
         }
 
+        // 태스크 시작
         task.resume()
     }
 
